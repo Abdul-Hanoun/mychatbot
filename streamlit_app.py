@@ -1,17 +1,16 @@
 import streamlit as st
 from hugchat import hugchat
-from hugchat.login import Login
 
 # App title
 st.set_page_config(page_title="🤗💬 HugChat")
 
-# Hugging Face Credentials
+# Sidebar instructions
 with st.sidebar:
     st.title('Chat Bot')
-  
-    
+    st.success('Proceed to entering your prompt message!', icon='👉')
+
 # Store LLM generated responses
-if "messages" not in st.session_state.keys():
+if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "How may I help you?"}]
 
 # Display chat messages
@@ -21,21 +20,22 @@ for message in st.session_state.messages:
 
 # Function for generating LLM response
 def generate_response(prompt_input):
-    # Create ChatBot                        
-    chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
+    # Create ChatBot without authentication
+    chatbot = hugchat.ChatBot()                        
     return chatbot.chat(prompt_input)
 
 # User-provided prompt
-if prompt := st.chat_input(disabled=not (hf_email and hf_pass)):
+if prompt := st.chat_input("Enter your message:"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            response = generate_response(prompt, hf_email, hf_pass) 
-            st.write(response) 
-    message = {"role": "assistant", "content": response}
-    st.session_state.messages.append(message)
+    # Generate a new response if last message is not from assistant
+    if st.session_state.messages[-1]["role"] != "assistant":
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                response = generate_response(prompt) 
+                st.write(response) 
+        message = {"role": "assistant", "content": response}
+        st.session_state.messages.append(message)
+
