@@ -9,7 +9,7 @@ st.set_page_config(page_title="🤗💬 HugChat")
 with st.sidebar:
     st.title('Chat Bot')
  
-     st.success('Proceed to entering your prompt message!', icon='👉')
+    st.success('Proceed to entering your prompt message!', icon='👉')
   
     
 # Store LLM generated responses
