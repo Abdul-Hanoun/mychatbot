@@ -8,8 +8,6 @@ st.set_page_config(page_title="🤗💬 HugChat")
 # Hugging Face Credentials
 with st.sidebar:
     st.title('Chat Bot')
- 
-    st.success('Proceed to entering your prompt message!', icon='👉')
   
     
 # Store LLM generated responses
